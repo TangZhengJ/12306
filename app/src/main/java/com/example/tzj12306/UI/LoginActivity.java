@@ -17,6 +17,7 @@ public class LoginActivity extends MyBaseActivity {
     EditText tv_login_id;
     EditText tv_login_password;
     Button button_login;
+    Button button_register;
     @Override
     protected int getContentViewId() {
         return R.layout.activity_login;
@@ -28,8 +29,8 @@ public class LoginActivity extends MyBaseActivity {
         Button title = (Button)findViewById(R.id.tv_actionbar_title);
         tv_login_id = (EditText) findViewById(R.id.et_login_id);
         tv_login_password = (EditText) findViewById(R.id.et_login_password);
+        button_register = (Button) findViewById(R.id.button_register) ;
         title.setText("登录12306");
-
         ctv_remember = (CheckedTextView)findViewById(R.id.ctv_login_remember);
         ctv_autologin = (CheckedTextView)findViewById(R.id.ctv_login_autologin);
         ctv_autologin.setOnClickListener(new View.OnClickListener() {
@@ -60,11 +61,17 @@ public class LoginActivity extends MyBaseActivity {
                 startActivity(intent);
             }
         });
+        button_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     protected void onStart() {
-        Log.d("LoginActivity","LoginActivity onStart");
         super.onStart();
 
         SharedPreferences pref = getSharedPreferences("user",MODE_PRIVATE);
@@ -81,40 +88,14 @@ public class LoginActivity extends MyBaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("LoginActivity","LoginActivity onResume");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("LoginActivity","LoginActivity onPause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("LoginActivity","LoginActivity onStop");
-    }
-
-    @Override
     protected void onRestart() {
 
         super.onRestart();
-        Log.d("LoginActivity","LoginActivity onRestart");
         SharedPreferences.Editor editor = getSharedPreferences("user",MODE_PRIVATE).edit();
         editor.putBoolean("AUTO",false);
         editor.apply();
         ctv_autologin.setChecked(false);
     }
 
-    @Override
-    protected void onDestroy() {
-
-        Log.d("LoginActivity","LoginActivity onRestart");
-
-        super.onDestroy();
-    }
 }
 

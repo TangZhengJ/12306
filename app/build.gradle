@@ -29,4 +29,5 @@ dependencies {
     compile'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.chen.wakehao.library:bottom-navigation-bar:1.0.0'
 }

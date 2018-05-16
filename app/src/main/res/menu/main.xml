@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        fragment="com.example.tzj12306.UI.ChooseStationFragment"
+        android:icon="@mipmap/train_24"
+        android:title="车票预订"/>
+    <item
+        fragment="com.example.tzj12306.UI.Frag2"
+        android:icon="@mipmap/order_24"
+        android:title="订单中心"/>
+    <item
+        fragment="com.example.tzj12306.UI.Frag3"
+        android:icon="@mipmap/personal_24"
+        android:title="我的12306"/>
+</menu>

@@ -1,13 +1,14 @@
 package com.example.tzj12306.UI;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.app.AlertDialog.Builder;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,21 +16,12 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.example.tzj12306.Database.GetStationList;
-import com.example.tzj12306.Database.Station;
-import com.example.tzj12306.MyActionBar.MyBaseActivity;
 import com.example.tzj12306.R;
 import com.example.tzj12306.Station.ChooseAreaActivity;
 import com.example.tzj12306.Station.HistoryInfo;
-import com.example.tzj12306.Station.StationActivity;
 import com.example.tzj12306.impl.OnItemClickListener;
-import com.example.tzj12306.util.HttpUtil;
-
-import org.litepal.crud.DataSupport;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,48 +34,52 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+/**
+ * Created by ${cqc} on 2017/8/24.
+ */
 
-public class SelectActivity extends MyBaseActivity {
-    // 返回的结果码
+public class ChooseStationFragment extends Fragment {
     private final static int REQUESTCODE_START = 1;
     private final static int REQUESTCODE_END= 2;
     private final static String TAG = SelectActivity.class.getSimpleName();
-    Button bt_start;
-    Button bt_end;
-    Button bt_clean_history;
-    ImageButton ib_exchange;
-    Calendar calendar = Calendar.getInstance();
-    int year = calendar.get(Calendar.YEAR);
-    int month = calendar.get(Calendar.MONTH)+1;
-    int day = calendar.get(Calendar.DAY_OF_MONTH);
-    RecyclerView rv_history_station;
-    List<HistoryInfo> historys;
-    RecyclerViewAdapt history_adapter;
-    OnItemClickListener myitemlistener;
-    String start;
-    String end;
+    private Button bt_start;
+    private Button bt_end;
+    private Button bt_clean_history;
+    private Button title;
+    private ImageButton ib_exchange;
+    private Calendar calendar = Calendar.getInstance();
+    private int year = calendar.get(Calendar.YEAR);
+    private int month = calendar.get(Calendar.MONTH)+1;
+    private int day = calendar.get(Calendar.DAY_OF_MONTH);
+    private RecyclerView rv_history_station;
+    private List<HistoryInfo> historys;
+    private RecyclerViewAdapt history_adapter;
+    private OnItemClickListener myitemlistener;
+    private Button button_date;
+    private Button button_time;
+    private Button button_query;
+    private CheckedTextView checkbox_student;
+    private String start;
+    private String end;
     @Override
-    protected int getContentViewId() {
-        return R.layout.active_select;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.choose_station, container, false);
+        title = (Button)getActivity().findViewById(R.id.tv_actionbar_title);
+        button_date = (Button)view.findViewById(R.id.button_date);
+        button_time = (Button)view.findViewById(R.id.button_time);
+        bt_start = (Button)view.findViewById(R.id.bt_start);
+        bt_end = (Button)view.findViewById(R.id.bt_end);
+        ib_exchange = (ImageButton) view.findViewById(R.id.ib_exchange);
+        button_query = (Button)view.findViewById(R.id.button_query);
+        checkbox_student = (CheckedTextView)view.findViewById(R.id.checkbox_student);
+        bt_clean_history = (Button)view.findViewById(R.id.bt_hisory_clean);
+        rv_history_station = (RecyclerView) view.findViewById(R.id.rv_history_station);
+        return view;
     }
-
     @Override
-    protected void init() {
-        setContentView(R.layout.active_select);
-        Button title = (Button)findViewById(R.id.tv_actionbar_title);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         title.setText("车票预订");
-        final Button button_date = (Button)findViewById(R.id.button_date);
-        final Button button_time = (Button)findViewById(R.id.button_time);
-        bt_start = (Button)findViewById(R.id.bt_start);
-        bt_end = (Button)findViewById(R.id.bt_end);
-        ib_exchange = (ImageButton) findViewById(R.id.ib_exchange);
-        bt_clean_history = (Button)findViewById(R.id.bt_hisory_clean);
-        Button button_query = (Button)findViewById(R.id.button_query);
-//        bingPicImg = (ImageView)findViewById(R.id.bing_pic_img);
-        final CheckedTextView checkbox_student = (CheckedTextView)findViewById(R.id.checkbox_student);
         bt_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,13 +92,6 @@ public class SelectActivity extends MyBaseActivity {
                 ChoiceStation(REQUESTCODE_START);
             }
         });
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        String bingPic = prefs.getString("bing_pic",null);
-//        if(bingPic != null){
-//            Glide.with(this).load(bingPic).into(bingPicImg);
-//        }else{
-//            loadBingPic();
-//        }
         ib_exchange.setOnClickListener(new View.OnClickListener() {
             private String str;
             @Override
@@ -122,7 +111,7 @@ public class SelectActivity extends MyBaseActivity {
                 start = bt_start.getText().toString();
                 end = bt_end.getText().toString();
                 String date = button_date.getText().toString();
-                Intent intent = new Intent(SelectActivity.this, QueryActivity.class);
+                Intent intent = new Intent(getActivity(), QueryActivity.class);
                 intent.putExtra("date", date);
                 intent.putExtra("year",year);
                 intent.putExtra("month",month);
@@ -141,7 +130,7 @@ public class SelectActivity extends MyBaseActivity {
         button_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(SelectActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int yearofDate, int monthOfYear, int dayOfMonth) {
                         year = yearofDate;
@@ -160,7 +149,7 @@ public class SelectActivity extends MyBaseActivity {
             }
 
             private void showChoisDialog() {
-                Builder builder=new Builder(SelectActivity.this);
+                AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
                 builder.setTitle("请选择时间:");
                 final String []items=new String[]{"00:00-24:00","00:00-6:00","06:00-12:00","12:00-18:00","18:00-24:00"};
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
@@ -181,7 +170,7 @@ public class SelectActivity extends MyBaseActivity {
                 FileOutputStream out = null;
                 BufferedWriter writer = null;
                 try {
-                    out = openFileOutput("history", Context.MODE_PRIVATE);
+                    out = getActivity().openFileOutput("history", Context.MODE_PRIVATE);
                     writer = new BufferedWriter(new OutputStreamWriter(out));
                     historys = new ArrayList<HistoryInfo>();
                     history_adapter = new RecyclerViewAdapt(historys,myitemlistener);
@@ -201,14 +190,11 @@ public class SelectActivity extends MyBaseActivity {
             }
         });
     }
-
-
-
     private void ReadFile(List<HistoryInfo> historys) {
         FileInputStream in = null;
         BufferedReader reader = null;
         try {
-            in = openFileInput("history");
+            in = getActivity().openFileInput("history");
             reader = new BufferedReader(new InputStreamReader(in));
             String str="";
             while( (str = reader.readLine())!=null)
@@ -225,7 +211,7 @@ public class SelectActivity extends MyBaseActivity {
         FileOutputStream out = null;
         BufferedWriter writer = null;
         try {
-            out = openFileOutput("history", Context.MODE_APPEND);
+            out = getActivity().openFileOutput("history", Context.MODE_APPEND);
             writer = new BufferedWriter(new OutputStreamWriter(out));
             writer.write(bt_start.getText().toString()+"\n");
             writer.write(bt_end.getText().toString()+"\n");
@@ -242,33 +228,32 @@ public class SelectActivity extends MyBaseActivity {
             }
         }
     }
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUESTCODE_START:
-                if (resultCode == RESULT_OK) {
+                if (resultCode == getActivity().RESULT_OK) {
                     bt_start.setText(data.getStringExtra("data_return"));
-                    Log.d("SelectActivity",data.getStringExtra("data_return"));
                 }
                 break;
             case REQUESTCODE_END:{
-                if (resultCode == RESULT_OK) {
+                if (resultCode == getActivity().RESULT_OK) {
 
                     bt_end.setText(data.getStringExtra("data_return"));
-                    Log.d("SelectActivity",data.getStringExtra("data_return"));
                 }
                 break;
             }
             default:
         }
     }
+    private void ChoiceStation(int REQUESTCODE) {
+        Intent intent = new Intent(getActivity(), ChooseAreaActivity.class);
+        startActivityForResult(intent,REQUESTCODE);
+    }
     @Override
-    protected void onStart() {
-        Log.d(TAG, "SelectActivity onStart");
-        rv_history_station = (RecyclerView) findViewById(R.id.rv_history_station);
-        LinearLayoutManager linearLayoutManager =   new LinearLayoutManager(this);
+    public void onStart() {
+        LinearLayoutManager linearLayoutManager =   new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         linearLayoutManager.setStackFromEnd(true);//列表再底部开始展示，反转后由上面开始展示
         linearLayoutManager.setReverseLayout(true);//列表翻转
@@ -297,7 +282,7 @@ public class SelectActivity extends MyBaseActivity {
             tv_history = (TextView) itemView.findViewById(R.id.tv_hisory_station);
         }
     }
-    private class RecyclerViewAdapt extends RecyclerView.Adapter<RVHoldelder> {
+    public class RecyclerViewAdapt extends RecyclerView.Adapter<RVHoldelder> {
         private List<HistoryInfo> historys;
         private OnItemClickListener onItemClickListener;
         public RecyclerViewAdapt(List<HistoryInfo> historys, OnItemClickListener myitemlistener) {
@@ -332,34 +317,4 @@ public class SelectActivity extends MyBaseActivity {
 
     }
 
-    private void ChoiceStation(int REQUESTCODE) {
-        Intent intent = new Intent(SelectActivity.this, ChooseAreaActivity.class);
-        startActivityForResult(intent,REQUESTCODE);
-    }
-    /**
-     * 加载背景图
-     */
-//    private void loadBingPic() {
-//        String requestBinPic = "http://guolin.tech/api/bing_pic";
-//        HttpUtil.sendOkHttpRequest(requestBinPic, new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                final String bingPic = response.body().string();
-//                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(SelectActivity.this).edit();
-//                editor.putString("bing_pic",bingPic);
-//                editor.apply();
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Glide.with(SelectActivity.this).load(bingPic).into(bingPicImg);
-//                    }
-//                });
-//            }
-//        });
-//    }
 }

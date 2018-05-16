@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.tzj12306.UI.LoginActivity"
-    android:background="@color/lightgray"
+    android:background="#FAFAFA"
     >
     <com.example.tzj12306.MyActionBar.MyActionbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></com.example.tzj12306.MyActionBar.MyActionbar>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="70dp">
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,7 +114,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="忘记密码>"
+                    android:text="忘记密码"
                     android:textSize="15dp"
                     android:background="#00000000"/>
             </LinearLayout>
@@ -126,6 +134,7 @@
                 android:layout_marginRight="15dp"
                 android:background="@color/colorPrimaryDark"/>
             <Button
+                android:id="@+id/button_register"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -136,4 +145,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
