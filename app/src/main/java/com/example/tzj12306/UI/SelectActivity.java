@@ -6,7 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.app.AlertDialog.Builder;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,17 +18,20 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.tzj12306.Database.GetStationList;
 import com.example.tzj12306.Database.Station;
 import com.example.tzj12306.MyActionBar.MyBaseActivity;
 import com.example.tzj12306.R;
+import com.example.tzj12306.Station.ChooseAreaActivity;
 import com.example.tzj12306.Station.HistoryInfo;
 import com.example.tzj12306.Station.StationActivity;
 import com.example.tzj12306.impl.OnItemClickListener;
+import com.example.tzj12306.util.HttpUtil;
 
-import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
 import java.io.BufferedReader;
@@ -41,11 +45,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 public class SelectActivity extends MyBaseActivity {
     // 返回的结果码
     private final static int REQUESTCODE_START = 1;
     private final static int REQUESTCODE_END= 2;
     private final static String TAG = SelectActivity.class.getSimpleName();
+//    private ImageView bingPicImg ;
     Button bt_start;
     Button bt_end;
     Button bt_clean_history;
@@ -76,6 +85,7 @@ public class SelectActivity extends MyBaseActivity {
         bt_end = (Button)findViewById(R.id.bt_end);
         ib_exchange = (ImageButton) findViewById(R.id.ib_exchange);
         Button button_query = (Button)findViewById(R.id.button_query);
+//        bingPicImg = (ImageView)findViewById(R.id.bing_pic_img);
         final CheckedTextView checkbox_student = (CheckedTextView)findViewById(R.id.checkbox_student);
         bt_end.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +99,13 @@ public class SelectActivity extends MyBaseActivity {
                 ChoiceStation(REQUESTCODE_START);
             }
         });
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        String bingPic = prefs.getString("bing_pic",null);
+//        if(bingPic != null){
+//            Glide.with(this).load(bingPic).into(bingPicImg);
+//        }else{
+//            loadBingPic();
+//        }
         ib_exchange.setOnClickListener(new View.OnClickListener() {
             private String str;
             @Override
@@ -278,37 +295,6 @@ public class SelectActivity extends MyBaseActivity {
         super.onStart();
     }
 
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "SelectActivity onResume");
-
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-
-        Log.d(TAG, "SelectActivity onPause");
-        super.onPause();
-    }
-    @Override
-    protected void onStop() {
-
-        Log.d(TAG, "SelectActivity onStop");
-        super.onStop();
-    }
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "SelectActivity onDestroy");
-        super.onDestroy();
-    }
-    @Override
-    public void onBackPressed() {
-
-        Log.d(TAG, "SelectActivity onBackPressed");
-        super.onBackPressed();
-    }
-
     private class RecyclerViewAdapt extends RecyclerView.Adapter<RVHoldelder> {
         private List<HistoryInfo> historys;
         private OnItemClickListener onItemClickListener;
@@ -337,7 +323,6 @@ public class SelectActivity extends MyBaseActivity {
             holder.itemView.setTag(position);
         }
 
-
         @Override
         public int getItemCount() {
             return historys.size();
@@ -351,47 +336,34 @@ public class SelectActivity extends MyBaseActivity {
             tv_history = (TextView) itemView.findViewById(R.id.tv_hisory_station);
         }
     }
-//    public void executeAssetsSQL(SQLiteDatabase db, String dbfilepath) {
-//        BufferedReader in = null;
-//        try {
-//            in = new BufferedReader(new InputStreamReader(getAssets().open(dbfilepath)));
-//            String line;
-//            String buffer = "";
-//            //开启事务
-//            db.beginTransaction();
-//            while ((line = in.readLine()) != null) {
-//                buffer += line;
-//                if (line.trim().endsWith(";")) {
-//                    db.execSQL(buffer.replace(";", ""));
-//                    buffer = "";
-//                }
-//            }
-//            //设置事务标志为成功，当结束事务时就会提交事务
-//            db.setTransactionSuccessful();
-//        } catch (Exception e) {
-//            Log.e("db-error", e.toString());
-//        } finally {
-//            //事务结束
-//            db.endTransaction();
-//            try {
-//                if (in != null)
-//                    in.close();
-//            } catch (Exception e) {
-//                Log.e("db-error", e.toString());
-//            }
-//        }
-//    }
     private void ChoiceStation(int REQUESTCODE) {
-        if(DataSupport.count(Station.class)==0){
-            GetStationList getStationList = new GetStationList();
-            getStationList.sendRequestWithOkhttp();
-//            SQLiteDatabase db = LitePal.getDatabase();
-//            executeAssetsSQL(db , "station.sql");
-
-            Log.d(TAG, String.valueOf(DataSupport.count(Station.class)));
-        }
-        Intent intent = new Intent(SelectActivity.this, StationActivity.class);
+        Intent intent = new Intent(SelectActivity.this, ChooseAreaActivity.class);
         startActivityForResult(intent,REQUESTCODE);
     }
-
+    /**
+     * 加载背景图
+     */
+//    private void loadBingPic() {
+//        String requestBinPic = "http://guolin.tech/api/bing_pic";
+//        HttpUtil.sendOkHttpRequest(requestBinPic, new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                final String bingPic = response.body().string();
+//                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(SelectActivity.this).edit();
+//                editor.putString("bing_pic",bingPic);
+//                editor.apply();
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Glide.with(SelectActivity.this).load(bingPic).into(bingPicImg);
+//                    }
+//                });
+//            }
+//        });
+//    }
 }

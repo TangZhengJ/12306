@@ -8,7 +8,7 @@
         android:id="@+id/tv_hisory_station"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="20dp"
+        android:textSize="12dp"
         android:textStyle="bold" />
 
 </LinearLayout>

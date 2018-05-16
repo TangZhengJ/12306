@@ -3,6 +3,8 @@
     <dbname value = "12306"></dbname>
     <version value = "1"></version>
     <list>
-        <mapping class = "com.example.tzj12306.Database.Station"></mapping>
+        <mapping class="com.example.tzj12306.db.Province"/>
+        <mapping class="com.example.tzj12306.db.City"/>
+        <mapping class="com.example.tzj12306.db.County"/>
     </list>
 </litepal>
