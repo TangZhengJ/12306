@@ -57,7 +57,7 @@ public class LoginActivity extends MyBaseActivity {
                 editor.putBoolean("REM",remember);
                 editor.putBoolean("AUTO",autologin);
                 editor.apply();
-                Intent intent = new Intent(LoginActivity.this,SelectActivity.class);
+                Intent intent= new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
             }
         });
