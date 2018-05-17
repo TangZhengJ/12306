@@ -7,7 +7,7 @@
         android:title="车票预订"/>
     <item
         fragment="com.example.tzj12306.Fragment.WeatherFragment"
-        android:icon="@mipmap/order_24"
+        android:icon="@mipmap/weather_24"
         android:title="天气预报"/>
     <item
         fragment="com.example.tzj12306.Fragment.OrderFragment"
