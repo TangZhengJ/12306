@@ -1,4 +1,4 @@
-package com.example.tzj12306.UI;
+package com.example.tzj12306.Fragment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.tzj12306.R;
-import com.example.tzj12306.Station.ChooseAreaActivity;
-import com.example.tzj12306.Station.HistoryInfo;
+import com.example.tzj12306.UI.ChooseAreaActivity;
+import com.example.tzj12306.UI.QueryActivity;
+import com.example.tzj12306.UI.SelectActivity;
+import com.example.tzj12306.db.HistoryInfo;
 import com.example.tzj12306.impl.OnItemClickListener;
+import com.example.tzj12306.impl.WeatherIdListener;
+import com.wakehao.bar.BottomNavigationBar;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -41,7 +47,7 @@ import java.util.List;
 public class ChooseStationFragment extends Fragment {
     private final static int REQUESTCODE_START = 1;
     private final static int REQUESTCODE_END= 2;
-    private final static String TAG = SelectActivity.class.getSimpleName();
+    private final static String TAG = "ChooseStationFragment";
     private Button bt_start;
     private Button bt_end;
     private Button bt_clean_history;
@@ -61,9 +67,25 @@ public class ChooseStationFragment extends Fragment {
     private CheckedTextView checkbox_student;
     private String start;
     private String end;
+    private static WeatherIdListener mWeatherIdListener;
+    private String weather_start = "CN101210107";
+    private String weather_end = "CN101210101";
+    BottomNavigationBar bottomNavigationBar;
+    @Override
+    public void onAttach(Context context) {
+        Log.d(TAG, "onAttach: ");
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
+        super.onCreate(savedInstanceState);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.choose_station, container, false);
+        Log.d(TAG, "onCreateView: ");
+        View view = inflater.inflate(R.layout.fragment_choose_station, container, false);
         title = (Button)getActivity().findViewById(R.id.tv_actionbar_title);
         button_date = (Button)view.findViewById(R.id.button_date);
         button_time = (Button)view.findViewById(R.id.button_time);
@@ -74,12 +96,13 @@ public class ChooseStationFragment extends Fragment {
         checkbox_student = (CheckedTextView)view.findViewById(R.id.checkbox_student);
         bt_clean_history = (Button)view.findViewById(R.id.bt_hisory_clean);
         rv_history_station = (RecyclerView) view.findViewById(R.id.rv_history_station);
+        bottomNavigationBar = (BottomNavigationBar)getActivity().findViewById(R.id.bottomBars);
         return view;
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated: ");
         super.onActivityCreated(savedInstanceState);
-        title.setText("车票预订");
         bt_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,6 +213,93 @@ public class ChooseStationFragment extends Fragment {
             }
         });
     }
+    @Override
+    public void onStart() {
+        Log.d(TAG, "onStart: ");
+        LinearLayoutManager linearLayoutManager =   new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        linearLayoutManager.setStackFromEnd(true);//列表再底部开始展示，反转后由上面开始展示
+        linearLayoutManager.setReverseLayout(true);//列表翻转
+        rv_history_station.setLayoutManager(linearLayoutManager);
+        historys = new ArrayList<HistoryInfo>();
+        ReadFile(historys);
+
+        history_adapter = new RecyclerViewAdapt(historys,myitemlistener);
+
+        rv_history_station.setAdapter(history_adapter);
+        myitemlistener= new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                TextView history = (TextView) view.findViewById(R.id.tv_hisory_station);
+                HistoryInfo historyInfo = historys.get(position);
+                bt_start.setText(historyInfo.getHistory_start());
+                bt_end.setText(historyInfo.getHistory_end());
+            }
+        };
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume: ");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: ");
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUESTCODE_START:
+                if (resultCode == getActivity().RESULT_OK) {
+                    String city_start = data.getStringExtra("data_return");
+                    bt_start.setText(city_start);
+                    weather_start=data.getStringExtra("weather_id");
+                    Log.d("weather_start",weather_start);
+                    mWeatherIdListener.onCityStart(weather_start,city_start);
+                }
+                break;
+            case REQUESTCODE_END:{
+                if (resultCode == getActivity().RESULT_OK) {
+                    String city_end = data.getStringExtra("data_return");
+                    bt_end.setText(city_end);
+                    weather_end=data.getStringExtra("weather_id");
+                    Log.d("weather_end",weather_end);
+                    mWeatherIdListener.onCityEnd(weather_end,city_end);
+                }
+                break;
+            }
+            default:
+        }
+    }
     private void ReadFile(List<HistoryInfo> historys) {
         FileInputStream in = null;
         BufferedReader reader = null;
@@ -205,7 +315,6 @@ public class ChooseStationFragment extends Fragment {
             e.printStackTrace();
         }
     }
-
     private void WriteFile() {
 
         FileOutputStream out = null;
@@ -228,52 +337,9 @@ public class ChooseStationFragment extends Fragment {
             }
         }
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUESTCODE_START:
-                if (resultCode == getActivity().RESULT_OK) {
-                    bt_start.setText(data.getStringExtra("data_return"));
-                }
-                break;
-            case REQUESTCODE_END:{
-                if (resultCode == getActivity().RESULT_OK) {
-
-                    bt_end.setText(data.getStringExtra("data_return"));
-                }
-                break;
-            }
-            default:
-        }
-    }
     private void ChoiceStation(int REQUESTCODE) {
         Intent intent = new Intent(getActivity(), ChooseAreaActivity.class);
         startActivityForResult(intent,REQUESTCODE);
-    }
-    @Override
-    public void onStart() {
-        LinearLayoutManager linearLayoutManager =   new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        linearLayoutManager.setStackFromEnd(true);//列表再底部开始展示，反转后由上面开始展示
-        linearLayoutManager.setReverseLayout(true);//列表翻转
-        rv_history_station.setLayoutManager(linearLayoutManager);
-        historys = new ArrayList<HistoryInfo>();
-        ReadFile(historys);
-
-        history_adapter = new RecyclerViewAdapt(historys,myitemlistener);
-
-        rv_history_station.setAdapter(history_adapter);
-        myitemlistener= new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                TextView history = (TextView) view.findViewById(R.id.tv_hisory_station);
-                HistoryInfo historyInfo = historys.get(position);
-                bt_start.setText(historyInfo.getHistory_start());
-                bt_end.setText(historyInfo.getHistory_end());
-            }
-        };
-        super.onStart();
     }
     private class RVHoldelder extends RecyclerView.ViewHolder {
         private TextView tv_history;
@@ -315,6 +381,9 @@ public class ChooseStationFragment extends Fragment {
             return historys.size();
         }
 
+    }
+    public static void setOnWeatherIdListener(WeatherIdListener weatherIdListener){
+        mWeatherIdListener = weatherIdListener;
     }
 
 }

@@ -15,21 +15,12 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.example.tzj12306.Database.GetStationList;
-import com.example.tzj12306.Database.Station;
 import com.example.tzj12306.MyActionBar.MyBaseActivity;
 import com.example.tzj12306.R;
-import com.example.tzj12306.Station.ChooseAreaActivity;
-import com.example.tzj12306.Station.HistoryInfo;
-import com.example.tzj12306.Station.StationActivity;
+import com.example.tzj12306.db.HistoryInfo;
 import com.example.tzj12306.impl.OnItemClickListener;
-import com.example.tzj12306.util.HttpUtil;
-
-import org.litepal.crud.DataSupport;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -41,10 +32,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class SelectActivity extends MyBaseActivity {
     // 返回的结果码

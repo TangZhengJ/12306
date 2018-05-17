@@ -1,4 +1,4 @@
-package com.example.tzj12306.UI;
+package com.example.tzj12306.Fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,12 +12,12 @@ import com.example.tzj12306.R;
  * Created by ${cqc} on 2017/8/24.
  */
 
-public class Frag2 extends Fragment {
+public class OrderFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.frag2, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_order, container, false);
         return rootView;
     }
 }

@@ -3,12 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:layout_marginRight="50dp">
+    android:layout_marginRight="15sp"
+    android:layout_marginTop="8sp">
     <TextView
         android:id="@+id/tv_hisory_station"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="12dp"
+        android:textSize="15dp"
         android:textStyle="bold" />
 
 </LinearLayout>

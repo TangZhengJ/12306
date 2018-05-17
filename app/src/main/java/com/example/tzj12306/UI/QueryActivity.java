@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.tzj12306.MyActionBar.MyBaseActivity;
 import com.example.tzj12306.R;
-import com.example.tzj12306.Station.TrianInfo;
+import com.example.tzj12306.db.TrianInfo;
 import com.example.tzj12306.impl.ActionBarClickListener;
 
 import java.text.ParseException;

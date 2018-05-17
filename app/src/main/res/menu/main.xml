@@ -2,15 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        fragment="com.example.tzj12306.UI.ChooseStationFragment"
+        fragment="com.example.tzj12306.Fragment.ChooseStationFragment"
         android:icon="@mipmap/train_24"
         android:title="车票预订"/>
     <item
-        fragment="com.example.tzj12306.UI.Frag2"
+        fragment="com.example.tzj12306.Fragment.WeatherFragment"
+        android:icon="@mipmap/weather_24"
+        android:title="天气预报"/>
+    <item
+        fragment="com.example.tzj12306.Fragment.OrderFragment"
         android:icon="@mipmap/order_24"
         android:title="订单中心"/>
     <item
-        fragment="com.example.tzj12306.UI.Frag3"
+        fragment="com.example.tzj12306.Fragment.PersonalFragment"
         android:icon="@mipmap/personal_24"
         android:title="我的12306"/>
 </menu>

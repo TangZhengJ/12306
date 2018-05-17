@@ -1,4 +1,4 @@
-package com.example.tzj12306.Station;
+package com.example.tzj12306.Fragment;
 
 
 import android.app.ProgressDialog;
@@ -86,6 +86,7 @@ public class ChooseAreaFragment extends Fragment {
                     String CountyName = CountyList.get(position).getCountyName();
                     Intent intent = new Intent();
                     intent.putExtra("data_return",CountyName);
+                    intent.putExtra("weather_id",weatherId);
                     getActivity().setResult(getActivity().RESULT_OK,intent);
                     getActivity().finish();
 //                    if(getActivity() instanceof MainActivity) {

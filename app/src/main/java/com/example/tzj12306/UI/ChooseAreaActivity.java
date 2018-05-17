@@ -1,4 +1,4 @@
-package com.example.tzj12306.Station;
+package com.example.tzj12306.UI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
