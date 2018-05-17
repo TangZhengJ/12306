@@ -1,16 +1,12 @@
 package com.example.tzj12306.Fragment;
 
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -28,7 +24,6 @@ import com.example.tzj12306.R;
 import com.example.tzj12306.UI.MainActivity;
 import com.example.tzj12306.gson.Forecast;
 import com.example.tzj12306.gson.Weather;
-import com.example.tzj12306.impl.WeatherIdListener;
 import com.example.tzj12306.util.HttpUtil;
 import com.example.tzj12306.util.Utility;
 
@@ -51,28 +46,14 @@ public class WeatherFragment extends Fragment {
     private TextView city_name1;
     private TextView city_name2;
     private ImageView bingPicImg;
-    private TextView titleText;
-    private String mWeatherId;
+    private TextView title;
     private String city_start = "临安";
     private String city_end = "杭州";
     private String weather_start = "CN101210107";
     private String weather_end = "CN101210101";
 
     @Override
-    public void onAttach(Context context) {
-        Log.d(TAG, "onAttach: ");
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: ");
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_weather, container, false);
         bingPicImg = (ImageView) view.findViewById(R.id.bing_pic_img);
         weatherLayout = (ScrollView) view.findViewById(R.id.weather_layout);
@@ -82,17 +63,16 @@ public class WeatherFragment extends Fragment {
         drawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
         city_name1 = (TextView) view.findViewById(R.id.tv_city_name1);
         city_name2 = (TextView) view.findViewById(R.id.tv_city_name2);
-        titleText = (TextView) getActivity().findViewById(R.id.tv_actionbar_title);
+        title = (TextView) view.findViewById(R.id.tv_actionbar_title);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.d(TAG, "onActivityCreated: ");
         super.onActivityCreated(savedInstanceState);
+        title.setText("天气预报");
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -110,7 +90,6 @@ public class WeatherFragment extends Fragment {
 
     @Override
     public void onStart() {
-        Log.d(TAG, "onStart: ");
         super.onStart();
         city_start = ((MainActivity)getActivity()).getCity_start();
         city_end = ((MainActivity)getActivity()).getCity_end();
@@ -121,7 +100,6 @@ public class WeatherFragment extends Fragment {
         if (weatherString_start  != null) {
             // 有缓存时直接解析天气数据
             Weather weather = Utility.handleWeatherResponse(weatherString_start );
-            mWeatherId = weather.basic.weatherId;
             showWeatherInfo_Start(weather);
         } else {
             // 无缓存时去服务器查询天气
@@ -132,42 +110,12 @@ public class WeatherFragment extends Fragment {
         if (weatherString_end != null) {
             // 有缓存时直接解析天气数据
             Weather weather = Utility.handleWeatherResponse(weatherString_end);
-            mWeatherId = weather.basic.weatherId;
             showWeatherInfo_End(weather);
         } else {
             // 无缓存时去服务器查询天气
             weatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(weather_end,1);
         }
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: ");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: ");
     }
 
     /**
@@ -185,7 +133,6 @@ public class WeatherFragment extends Fragment {
                     public void run() {
                         if (weather != null && "ok".equals(weather.status)) {
                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-                            mWeatherId = weather.basic.weatherId;
                             if(i==0) {
                                 editor.putString(weather_start, responseText);
                                 showWeatherInfo_Start(weather);

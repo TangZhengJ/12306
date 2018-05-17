@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_message"
+            android:icon="@drawable/nav_message"
+            android:title="我的消息" />
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/nav_friends"
+            android:title="常用联系人" />
+        <item
+            android:id="@+id/nav_location"
+            android:icon="@drawable/nav_location"
+            android:title="送票地址" />
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/nav_info"
+            android:title="个人资料" />
+        <item
+            android:id="@+id/nav_insurance"
+            android:icon="@drawable/nav_insurance"
+            android:title="我的保险" />
+    </group>
+    <group android:checkableBehavior="single">
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/nav_settings"
+        android:title="系统设置" />
+    <item
+        android:id="@+id/nav_about"
+        android:icon="@drawable/nav_about"
+        android:title="关于我们" />
+    </group>
+</menu>

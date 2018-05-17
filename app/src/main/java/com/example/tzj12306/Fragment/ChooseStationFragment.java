@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.example.tzj12306.R;
 import com.example.tzj12306.UI.ChooseAreaActivity;
 import com.example.tzj12306.UI.QueryActivity;
-import com.example.tzj12306.UI.SelectActivity;
 import com.example.tzj12306.db.HistoryInfo;
 import com.example.tzj12306.impl.OnItemClickListener;
 import com.example.tzj12306.impl.WeatherIdListener;
@@ -86,7 +85,7 @@ public class ChooseStationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_choose_station, container, false);
-        title = (Button)getActivity().findViewById(R.id.tv_actionbar_title);
+        title = (Button)view.findViewById(R.id.tv_actionbar_title);
         button_date = (Button)view.findViewById(R.id.button_date);
         button_time = (Button)view.findViewById(R.id.button_time);
         bt_start = (Button)view.findViewById(R.id.bt_start);
@@ -103,6 +102,7 @@ public class ChooseStationFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.d(TAG, "onActivityCreated: ");
         super.onActivityCreated(savedInstanceState);
+        title.setText("车票预订");
         bt_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

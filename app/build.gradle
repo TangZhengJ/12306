@@ -31,4 +31,6 @@ dependencies {
     compile 'com.chen.wakehao.library:bottom-navigation-bar:1.0.0'
     compile 'com.android.support:support-v4:26.0.0-alpha1'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:design:24.2.1'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }
