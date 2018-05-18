@@ -64,8 +64,8 @@ public class LoginActivity extends MyBaseActivity {
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
+                Intent intent= new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivityForResult(intent,1);
             }
         });
     }
@@ -80,7 +80,6 @@ public class LoginActivity extends MyBaseActivity {
             tv_login_password.setText(pref.getString("PSW", ""));
             ctv_remember.setChecked(pref.getBoolean("REM",false));
             ctv_autologin.setChecked(pref.getBoolean("AUTO",false));
-            Log.d("LoginActivity", String.valueOf(ctv_autologin.isChecked()));
             if (ctv_autologin.isChecked()) {
                 button_login.performClick();
             }
@@ -97,5 +96,18 @@ public class LoginActivity extends MyBaseActivity {
         ctv_autologin.setChecked(false);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 1:{
+                if(resultCode == RESULT_OK){
+                    tv_login_id.setText(data.getStringExtra("user_name"));
+                    tv_login_password.setText(data.getStringExtra("password"));
+                    break;
+                }
+            }
+        }
+    }
 }
 

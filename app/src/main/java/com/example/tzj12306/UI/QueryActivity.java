@@ -69,7 +69,7 @@ public class QueryActivity extends MyBaseActivity implements ActionBarClickListe
 
         date = (year+"-"+month+"-"+day);
         bt_selectday.setText(date);
-        setMyActionBar(start+"->"+end, R.mipmap.ic_left_light, "取消", R.mipmap.ic_right_light, "确认", this);
+        setMyActionBar(R.id.actionbar_query,start+"->"+end, R.mipmap.ic_left_light, "取消", R.mipmap.ic_right_light, "确认", this);
 
 
         bt_prevday.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +199,6 @@ public class QueryActivity extends MyBaseActivity implements ActionBarClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "QueryActivity onResume");
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH)+1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -217,18 +216,6 @@ public class QueryActivity extends MyBaseActivity implements ActionBarClickListe
             bt_prevday.setClickable(true);
             bt_prevday.setBackgroundResource(R.color.primary);
         }
-    }
-    @Override
-    protected void onPause() {
-
-        Log.d(TAG, "QueryActivity onPause");
-        super.onPause();
-    }
-    @Override
-    protected void onStop() {
-
-        Log.d(TAG, "QueryActivity onStop");
-        super.onStop();
     }
 }
 

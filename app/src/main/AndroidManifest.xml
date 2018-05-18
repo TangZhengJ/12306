@@ -22,7 +22,8 @@
         <activity android:name=".UI.SelectActivity" />
         <activity android:name=".UI.QueryActivity" />
         <activity android:name=".UI.MainActivity" />
-        <activity android:name=".UI.ChooseAreaActivity"></activity>
+        <activity android:name=".UI.ChooseAreaActivity" />
+        <activity android:name=".UI.RegisterActivity"></activity>
     </application>
 
 </manifest>

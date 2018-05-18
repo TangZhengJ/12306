@@ -12,7 +12,7 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content" />-->
     <com.example.tzj12306.MyActionBar.MyActionbar
-        android:id="@+id/actionbar"
+        android:id="@+id/actionbar_query"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></com.example.tzj12306.MyActionBar.MyActionbar>
     <LinearLayout

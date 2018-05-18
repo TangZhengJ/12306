@@ -26,8 +26,8 @@ public abstract class MyBaseActivity extends AppCompatActivity {
         setContentView(getContentViewId());
         init();
     }
-    protected void setMyActionBar(String strTitle, int resIdLeft, String strLeft, int resIdRight, String strRight, final ActionBarClickListener listener) {
-        myActionbar = (MyActionbar) findViewById(R.id.actionbar);
+    protected void setMyActionBar(int id, String strTitle, int resIdLeft, String strLeft, int resIdRight, String strRight, final ActionBarClickListener listener) {
+        myActionbar = (MyActionbar) findViewById(id);
         myActionbar.setData(strTitle, resIdLeft, strLeft, resIdRight, strRight, listener);
     }
     /**
