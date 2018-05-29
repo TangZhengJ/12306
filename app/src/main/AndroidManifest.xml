@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UI.LoginActivity"
+            android:name=".UI.MainActivity"
             android:label="12306">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".UI.SelectActivity" />
         <activity android:name=".UI.QueryActivity" />
-        <activity android:name=".UI.MainActivity" />
+        <activity android:name=".UI.LoginActivity" />
         <activity android:name=".UI.ChooseAreaActivity" />
         <activity android:name=".UI.RegisterActivity"></activity>
     </application>

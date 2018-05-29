@@ -1,17 +1,21 @@
 package com.example.tzj12306.db;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 /**
  * Created by 正军 on 2018/5/18.
  */
 
-public class User extends DataSupport{
+public class User extends DataSupport implements Parcelable{
     private int id;
     private String UserName;
     private String Password;
-    private String Name;
-    private String CardId;
+    private List<IdCard> idCards;
     private String PhoneNum;
     private String email;
     private boolean loginFlag;
@@ -19,27 +23,67 @@ public class User extends DataSupport{
     public User() {
     }
 
-    public User(String userName, String password, String name, String id, String phoneNum, String email) {
-        UserName = userName;
-        Password = password;
-        Name = name;
-        CardId = id;
-        PhoneNum = phoneNum;
-        this.email = email;
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            User user = new User();
+            user.UserName = in.readString();
+            user.Password = in.readString();
+            user.PhoneNum = in.readString();
+            user.email = in.readString();
+            user.loginFlag = ((in.readInt()==1)?true:false);
+            user.idCards = in.readArrayList(IdCard.class.getClassLoader());
+            return user;
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(UserName);
+        dest.writeString(Password);
+        dest.writeString(PhoneNum);
+        dest.writeString(email);
+        dest.writeInt(loginFlag?1:0);
+        dest.writeList(idCards);
+    }
+    public List<IdCard> getIdCards() {
+        return idCards;
+    }
+
+    public void setIdCards(List<IdCard> idCards) {
+        this.idCards = idCards;
+    }
+
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-    public String getName() {
-        return Name;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", UserName='" + UserName + '\'' +
+                ", Password='" + Password + '\'' +
+                ", idCards=" + idCards +
+                ", PhoneNum='" + PhoneNum + '\'' +
+                ", email='" + email + '\'' +
+                ", loginFlag=" + loginFlag +
+                '}';
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPassword() {
@@ -56,14 +100,6 @@ public class User extends DataSupport{
 
     public void setUserName(String userName) {
         UserName = userName;
-    }
-
-    public String getCardId() {
-        return CardId;
-    }
-
-    public void setCardId(String id) {
-        CardId = id;
     }
 
     public String getPhoneNum() {
@@ -89,4 +125,6 @@ public class User extends DataSupport{
     public void setLoginFlag(boolean loginFlag) {
         this.loginFlag = loginFlag;
     }
+
+
 }

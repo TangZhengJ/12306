@@ -1,22 +1,33 @@
 package com.example.tzj12306.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.tzj12306.db.City;
 import com.example.tzj12306.db.County;
+import com.example.tzj12306.db.IdCard;
 import com.example.tzj12306.db.Province;
+import com.example.tzj12306.db.User;
 import com.example.tzj12306.gson.Weather;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 正军 on 2018/5/3.
  */
 
 public class Utility {
+    static String TAG = "Utility";
     /**
      * 解析和处理服务器返回的省级数据
      */
@@ -97,4 +108,63 @@ public class Utility {
         }
         return null;
     }
+    /**
+     * 解析用户信息
+     */
+    public static User parseUserXML(String response){
+        User user = new User();
+        IdCard idCard = new IdCard();
+        List<IdCard> cards = new ArrayList<IdCard>();
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser xmlPullParser = factory.newPullParser();
+            xmlPullParser.setInput(new StringReader(response));
+            int eventType = xmlPullParser.getEventType();
+
+            while (eventType != XmlPullParser.END_DOCUMENT){
+                String nodeName = xmlPullParser.getName();
+                switch (eventType){
+                    case XmlPullParser.START_TAG:{
+                        if("fail".equals(nodeName)){
+                            user.setLoginFlag(false);
+                            break;
+                        } else if("success".equals(nodeName)){
+                            user.setLoginFlag(true);
+                        }else if("UserId".equals(nodeName)){
+                            user.setUserName(xmlPullParser.nextText());
+                        }else if("Password".equals(nodeName)){
+                            user.setPassword(xmlPullParser.nextText());
+                        }else if("Email".equals(nodeName)){
+                            user.setEmail(xmlPullParser.nextText());
+                        }else if("PhoneNum".equals(nodeName)){
+                            user.setPhoneNum(xmlPullParser.nextText());
+                        }else if("IdCard".equals(nodeName)){
+                            idCard = new IdCard();
+                        }else if("CardId".equals(nodeName)){
+                            idCard.setCardId(xmlPullParser.nextText());
+                        }else if("UserName".equals(nodeName)){
+                            idCard.setName(xmlPullParser.nextText());
+                        }
+                        break;
+                    }
+                    case XmlPullParser.END_TAG:{
+                        if("IdCard".equals(nodeName)){
+                            cards.add(idCard);
+                        }else if("USER".equals(nodeName)){
+                            user.setIdCards(cards);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                eventType = xmlPullParser.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+
+    }
+
 }

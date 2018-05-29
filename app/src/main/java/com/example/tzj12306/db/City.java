@@ -1,12 +1,15 @@
 package com.example.tzj12306.db;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.litepal.crud.DataSupport;
 
 /**
  * Created by 正军 on 2018/5/3.
  */
 
-public class City extends DataSupport {
+public class City extends DataSupport{
     private int id;
     private String cityName;
     private int cityCode;
@@ -43,4 +46,5 @@ public class City extends DataSupport {
     public void setProvinceId(int provinceId) {
         this.provinceId = provinceId;
     }
+
 }

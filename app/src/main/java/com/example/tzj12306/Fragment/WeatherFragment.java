@@ -95,6 +95,7 @@ public class WeatherFragment extends Fragment {
         city_end = ((MainActivity)getActivity()).getCity_end();
         weather_start = ((MainActivity)getActivity()).getWeather_start();
         weather_end = ((MainActivity)getActivity()).getWeather_end();
+        Log.d(TAG, "onStart: "+city_start+city_end+weather_start+weather_end);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String weatherString_start = prefs.getString(weather_start, null);
         if (weatherString_start  != null) {
@@ -122,7 +123,7 @@ public class WeatherFragment extends Fragment {
      * 根据天气id请求城市天气信息。
      */
     public void requestWeather(final String weatherId, final int i) {
-        String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=bc0418b57b2d4918819d3974ac1285d9";
+        String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=13b3e6c9c28f45afa43f22d350aab991";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {

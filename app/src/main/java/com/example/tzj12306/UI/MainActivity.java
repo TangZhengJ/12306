@@ -2,11 +2,14 @@ package com.example.tzj12306.UI;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.TextView;
 
 import com.example.tzj12306.Fragment.ChooseStationFragment;
 import com.example.tzj12306.MyActionBar.MyActionbar;
 import com.example.tzj12306.MyActionBar.MyBaseActivity;
 import com.example.tzj12306.R;
+import com.example.tzj12306.db.User;
 import com.example.tzj12306.impl.WeatherIdListener;
 
 public class MainActivity extends MyBaseActivity {
@@ -14,6 +17,8 @@ public class MainActivity extends MyBaseActivity {
     private String city_end = "杭州";
     private String weather_start = "CN101210107";
     private String weather_end = "CN101210101";
+    private TextView user_name;
+    private TextView user_message;
     @Override
     protected int getContentViewId() {
         return R.layout.activity_main;
@@ -21,6 +26,8 @@ public class MainActivity extends MyBaseActivity {
 
     @Override
     protected void init() {
+        user_name = (TextView) findViewById(R.id.user_name);
+        user_message = (TextView) findViewById(R.id.user_message);
 
     }
 
@@ -31,7 +38,6 @@ public class MainActivity extends MyBaseActivity {
     }
 
     public class OnWeatherIdListener implements WeatherIdListener {
-
         @Override
         public void onCityStart(String data1, String data2) {
             weather_start = data1;

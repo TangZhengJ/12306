@@ -73,7 +73,7 @@ public class RegisterActivity extends MyBaseActivity implements ActionBarClickLi
         {
             Toast.makeText(this, "两次输入密码不一致", Toast.LENGTH_SHORT).show();
         }else {
-            User user = new User(user_name, password, name, id, phone_num, email);
+            User user = new User();
             Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
             user.save();
             Intent intent = new Intent();
