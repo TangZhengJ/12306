@@ -2,18 +2,22 @@ package com.example.tzj12306.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tzj12306.R;
 import com.example.tzj12306.UI.LoginActivity;
+import com.example.tzj12306.UI.UserInfo;
 import com.example.tzj12306.db.User;
 
 /**
@@ -25,6 +29,7 @@ public class PersonalFragment extends Fragment {
     private TextView user_name;
     private TextView user_message;
     private RelativeLayout nav_header;
+    private User user;
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal, container, false);
@@ -39,17 +44,43 @@ public class PersonalFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        User user = new User();
+        user = new User();
         if(getActivity().getIntent().hasExtra("user")){
             user = (User)getActivity().getIntent().getParcelableExtra("user");
         }
         if(user.isLoginFlag()){
             user_name.setText(user.getUserName());
             user_message.setText("点击切换账号");
+        }else{
+            user_name.setText("登录/注册");
+            user_message.setText("快速登录，同步信息");
         }
-       nav_header.setOnClickListener(new View.OnClickListener() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.nav_info:{
+                        if(user.isLoginFlag()) {
+                            Intent intent = new Intent(getActivity(),UserInfo.class);
+                            intent.putExtra("user", user);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+                return false;
+            }
+        });
+        nav_header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (user.isLoginFlag()){
+                    user.setLoginFlag(false);
+                    Toast.makeText(getActivity(),"注销成功！", Toast.LENGTH_SHORT).show();
+                }
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
             }
