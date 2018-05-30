@@ -2,6 +2,7 @@ package com.example.tzj12306.UI;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -49,6 +50,17 @@ public class LoginActivity extends MyBaseActivity {
                 ctv_autologin.setChecked(!ctv_autologin.isChecked());
             }
         });
+        SharedPreferences pref = getSharedPreferences("user",MODE_PRIVATE);
+
+        if(pref.contains("REM")) {
+            tv_login_id.setText(pref.getString("ID", ""));
+            tv_login_password.setText(pref.getString("PSW", ""));
+            ctv_remember.setChecked(pref.getBoolean("REM",false));
+            ctv_autologin.setChecked(pref.getBoolean("AUTO",false));
+            if (ctv_autologin.isChecked()) {
+                button_login.performClick();
+            }
+        }
         ctv_remember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,14 +98,15 @@ public class LoginActivity extends MyBaseActivity {
 
     private void UserLogin(String userId,String password) {
         password = Encrypt.md5(password);
-        HttpUtil.sendOkHttpRequest("http://192.168.1.106:8080/12306/User_Login.jsp?userId="+userId+"&password="+password, new Callback() {
+        HttpUtil.sendOkHttpRequest("http://192.168.43.148:8080/12306/User_Login.jsp?userId="+userId+"&password="+password, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 final String ex = e.toString();
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(LoginActivity.this, "服务器异常！"+ex, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "服务器异常！", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -102,6 +115,7 @@ public class LoginActivity extends MyBaseActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final User user =  Utility.parseUserXML(response.body().string());
+                Log.d("11", "onFailure: "+user.toString());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -123,22 +137,6 @@ public class LoginActivity extends MyBaseActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        SharedPreferences pref = getSharedPreferences("user",MODE_PRIVATE);
-
-        if(pref.contains("REM")) {
-            tv_login_id.setText(pref.getString("ID", ""));
-            tv_login_password.setText(pref.getString("PSW", ""));
-            ctv_remember.setChecked(pref.getBoolean("REM",false));
-            ctv_autologin.setChecked(pref.getBoolean("AUTO",false));
-            if (ctv_autologin.isChecked()) {
-                button_login.performClick();
-            }
-        }
-    }
 
     @Override
     protected void onRestart() {

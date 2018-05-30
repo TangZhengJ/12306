@@ -109,9 +109,10 @@ public class Utility {
         return null;
     }
     /**
-     * 解析用户信息
+     * 解析登录用户信息
      */
     public static User parseUserXML(String response){
+        Log.d("22", "onFailure: "+response);
         User user = new User();
         IdCard idCard = new IdCard();
         List<IdCard> cards = new ArrayList<IdCard>();
@@ -166,5 +167,40 @@ public class Utility {
         return user;
 
     }
+    /**
+     * 解析注册用户信息
+     */
+    public static boolean parseLoginResponseXML(String response){
+        Log.d(TAG, "parseLoginResponseXML: " +response);
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser xmlPullParser = factory.newPullParser();
+            xmlPullParser.setInput(new StringReader(response));
+            int eventType = xmlPullParser.getEventType();
 
+            while (eventType != XmlPullParser.END_DOCUMENT){
+                String nodeName = xmlPullParser.getName();
+                switch (eventType){
+                    case XmlPullParser.START_TAG:{
+                        if("fail".equals(nodeName)){
+                            return false;
+                        } else if("success".equals(nodeName)){
+                            return true;
+                        }
+                        break;
+                    }
+                    case XmlPullParser.END_TAG:{
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                eventType = xmlPullParser.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
 }
