@@ -254,26 +254,28 @@ public class ChooseStationFragment extends Fragment {
     }
     //写入历史记录
     private void WriteFile() {
-
-        FileOutputStream out = null;
-        BufferedWriter writer = null;
-        try {
-            out = getActivity().openFileOutput("history", Context.MODE_APPEND);
-            writer = new BufferedWriter(new OutputStreamWriter(out));
-            writer.write(bt_start.getText().toString()+"\n");
-            writer.write(bt_end.getText().toString()+"\n");
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            try{
-                if (writer != null){
-                    writer.close();
-                }
+        if(bt_start.getText().toString()!=null&&bt_end.getText().toString()!=null){
+            FileOutputStream out = null;
+            BufferedWriter writer = null;
+            try {
+                out = getActivity().openFileOutput("history", Context.MODE_APPEND);
+                writer = new BufferedWriter(new OutputStreamWriter(out));
+                writer.write(bt_start.getText().toString()+"\n");
+                writer.write(bt_end.getText().toString()+"\n");
+                writer.flush();
             } catch (IOException e) {
                 e.printStackTrace();
+            }finally {
+                try{
+                    if (writer != null){
+                        writer.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
     }
     //选择车站
     private void ChoiceStation(int REQUESTCODE) {

@@ -24,7 +24,7 @@
         <activity android:name=".UI.LoginActivity" />
         <activity android:name=".UI.ChooseAreaActivity" />
         <activity android:name=".UI.RegisterActivity" />
-        <activity android:name=".UI.UserInfo"></activity>
+        <activity android:name=".UI.UserInfoActivity"></activity>
     </application>
 
 </manifest>

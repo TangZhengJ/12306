@@ -98,7 +98,7 @@ public class LoginActivity extends MyBaseActivity {
 
     private void UserLogin(String userId,String password) {
         password = Encrypt.md5(password);
-        HttpUtil.sendOkHttpRequest("http://192.168.43.148:8080/12306/User_Login.jsp?userId="+userId+"&password="+password, new Callback() {
+        HttpUtil.sendOkHttpRequest("http://192.168.1.130:8080/12306/User_Login.jsp?userId="+userId+"&password="+password, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 final String ex = e.toString();

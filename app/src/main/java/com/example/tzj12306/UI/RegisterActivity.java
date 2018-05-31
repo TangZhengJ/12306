@@ -100,7 +100,7 @@ public class RegisterActivity extends MyBaseActivity implements ActionBarClickLi
                     .add("Name",name)
                     .add("CardId",idCard)
                     .build();
-            HttpUtil.sendOkHttpRequest("http://192.168.43.148:8080/12306/User_Register.jsp",requestBody , new Callback() {
+            HttpUtil.sendOkHttpRequest("http://192.168.1.130:8080/12306/User_Register.jsp",requestBody , new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     runOnUiThread(new Runnable() {
