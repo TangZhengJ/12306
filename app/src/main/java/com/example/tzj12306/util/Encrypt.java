@@ -58,7 +58,7 @@ public class Encrypt {
     }
 
     // 对密钥进行处理
-    private static Key getRawKey(String key) throws Exception {
+    private static Key getRawKey1(String key) throws Exception {
         KeyGenerator kgen = KeyGenerator.getInstance(ALGORITHM);
         //for android
         SecureRandom sr = null;
@@ -77,7 +77,7 @@ public class Encrypt {
         return new SecretKeySpec(raw, ALGORITHM);
     }
     // 对密钥进行处理
-    private static Key getRawKey1(String key) throws Exception {
+    private static Key getRawKey2(String key) throws Exception {
         DESKeySpec dks = new DESKeySpec(key.getBytes());
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
         return keyFactory.generateSecret(dks);
@@ -105,7 +105,7 @@ public class Encrypt {
         try {
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             IvParameterSpec iv = new IvParameterSpec(IVPARAMETERSPEC.getBytes());
-            cipher.init(Cipher.ENCRYPT_MODE, getRawKey(key), iv);
+            cipher.init(Cipher.ENCRYPT_MODE, getRawKey1(key), iv);
             byte[] bytes = cipher.doFinal(data);
             return Base64.encodeToString(bytes, Base64.DEFAULT);
         } catch (Exception e) {
@@ -135,7 +135,7 @@ public class Encrypt {
         try {
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             IvParameterSpec iv = new IvParameterSpec(IVPARAMETERSPEC.getBytes());
-            cipher.init(Cipher.DECRYPT_MODE, getRawKey(key), iv);
+            cipher.init(Cipher.DECRYPT_MODE, getRawKey1(key), iv);
             byte[] original = cipher.doFinal(data);
             String originalString = new String(original);
             return originalString;
